@@ -11,7 +11,7 @@ The audio posterior probability feature is extracted as the input feature, and w
 ## Experiments
 
 ### Load data
-Load the data by adjusting the path parameters in AA. In the experiment, we divided the dataset into three datasets: train, test, and dev.
+Load the data by adjusting the path parameters in load_data.py. In the experiment, we divided the dataset into three datasets: train, test, and dev.
 
 ### Program
 Run the program using the following command:
