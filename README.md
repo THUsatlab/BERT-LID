@@ -2,16 +2,16 @@
 
 We propose a BERT-based language identification system (BERT-LID) to improve language identification performance, especially on short-duration speech segments. We extend the original BERT model by taking the phonetic posteriorgrams (PPG) derived from the front-end phone recognizer as input. Then we deployed the optimal deep classifier followed by it for language identification.
 
-## DataBase
+## Datasets
 We use OLR20, TIMIT&THCHS-30, [TAL_ASR](https://ai.100tal.com/dataset) datasets for experiments. Among them, in order to test in segment audio, we perform segmentation processing on TIMIT&THCHS-30, where the window length is 1s and the window movement is 1s for segmentation. The specific usage of data is shown in data. The TAL_ASR data is forcibly aligned. 
 
 ## Feature extraction
-The audio posterior probability feature is extracted as the input feature, and we use PHONEXIA BOTTLENECK FEATURE EXTRACTOR to extract. For more details, we can get more from“Multilingually trained bottleneck features in spoken language recognition”.
+The audio posterior probability feature is extracted as the input feature, and we use PHONEXIA BOTTLENECK FEATURE EXTRACTOR to extract. For more details, we can get more from "Multilingually trained bottleneck features in spoken language recognition".
 
-## Experiment
+## Experiments
 
-### Loda data
-Loda the data by adjusting the path parameters in AA. In the experiment, we divided the dataset into three datasets: train, test, and dev.
+### Load data
+Load the data by adjusting the path parameters in AA. In the experiment, we divided the dataset into three datasets: train, test, and dev.
 
 ### Program
 Run the program using the following command:
