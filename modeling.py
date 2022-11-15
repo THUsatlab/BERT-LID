@@ -26,6 +26,7 @@ import shutil
 import tarfile
 import tempfile
 import sys
+import numpy as np
 from io import open
 
 import torch
@@ -258,6 +259,7 @@ class BertEmbeddings(nn.Module):
     def __init__(self, config):
         super(BertEmbeddings, self).__init__()
         self.word_embeddings = nn.Embedding(config.vocab_size, config.hidden_size, padding_idx=0)
+        print('config.vocab_size:', config.vocab_size)
         self.position_embeddings = nn.Embedding(config.max_position_embeddings, config.hidden_size)
         self.token_type_embeddings = nn.Embedding(config.type_vocab_size, config.hidden_size)
 
@@ -267,19 +269,29 @@ class BertEmbeddings(nn.Module):
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
     def forward(self, input_ids, token_type_ids=None):
+        print(np.shape(input_ids))
         seq_length = input_ids.size(1)
+        print('seq_length:', seq_length)
         position_ids = torch.arange(seq_length, dtype=torch.long, device=input_ids.device)
-        position_ids = position_ids.unsqueeze(0).expand_as(input_ids)
+        print('position_ids', position_ids)
+        position_ids = position_ids.unsqueeze(0).expand(input_ids.size(0), input_ids.size(1))
+        #position_ids = position_ids.unsqueeze(-1).expand(input_ids.size(1))
         if token_type_ids is None:
-            token_type_ids = torch.zeros_like(input_ids)
+            token_type_ids = torch.zeros_like(position_ids)#input_is)
+        #position_ids = torch.zeros_like(token_type_ids)
 
-        words_embeddings = self.word_embeddings(input_ids)
-        position_embeddings = self.position_embeddings(position_ids)
-        token_type_embeddings = self.token_type_embeddings(token_type_ids)
+        print('type(input_ids)', type(input_ids))
+        print('input_ids, position_ids, token_type_ids:', np.shape(input_ids), np.shape(position_ids), np.shape(token_type_ids))
 
-        embeddings = words_embeddings + position_embeddings + token_type_embeddings
+        #words_embeddings = self.word_embeddings(input_ids.long())
+        position_embeddings = self.position_embeddings(position_ids.long())
+        token_type_embeddings = self.token_type_embeddings(token_type_ids.long())
+        print('shape:',np.shape(input_ids),np.shape(position_embeddings), np.shape(token_type_embeddings))
+
+        embeddings = input_ids + position_embeddings + token_type_embeddings
         embeddings = self.LayerNorm(embeddings)
         embeddings = self.dropout(embeddings)
+        print('embeddings shape:',np.shape(embeddings))
         return embeddings
 
 
@@ -327,6 +339,8 @@ class BertSelfAttention(nn.Module):
         # seem a bit unusual, but is taken from the original Transformer paper.
         attention_probs = self.dropout(attention_probs)
 
+        print('np.shape(hidden_states):', np.shape(hidden_states))
+        print('attention_scores, atention_probs, value_layer:', np.shape(attention_scores), np.shape(attention_probs), np.shape(value_layer))
         context_layer = torch.matmul(attention_probs, value_layer)
         context_layer = context_layer.permute(0, 2, 1, 3).contiguous()
         new_context_layer_shape = context_layer.size()[:-2] + (self.all_head_size,)
