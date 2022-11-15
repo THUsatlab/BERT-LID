@@ -6,12 +6,15 @@ We propose a BERT-based language identification system (BERT-LID) to improve lan
 We use OLR20, TIMIT&THCHS-30, [TAL_ASR](https://ai.100tal.com/dataset) datasets for experiments. Among them, in order to test in segment audio, we perform segmentation processing on TIMIT&THCHS-30, where the window length is 1s and the window movement is 1s for segmentation. The specific usage of data is shown in data. The TAL_ASR data is forcibly aligned. 
 
 ## Feature extraction
-The audio posterior probability feature is extracted as the input feature, and we use PHONEXIA BOTTLENECK FEATURE EXTRACTOR to extract. For more details, we can get more from "Multilingually trained bottleneck features in spoken language recognition".
+The audio posterior probability feature is extracted as the input feature, and we use PHONEXIA BOTTLENECK FEATURE EXTRACTOR to extract. For more details, we can get more from "Multilingually trained bottleneck features in spoken language recognition". Since the default dimension of BERT is 768, it needs to be adjusted before feature input.
 
 ## Experiments
 
 ### Load data
 Load the data by adjusting the path parameters in load_data.py. In the experiment, we divided the dataset into three datasets: train, test, and dev.
+
+### Models
+Our model is saved in BertCNN, BertRCNN, BertDPCNN, BertLSTM, and pay attention to whether bert in the model-related file is turned on during use. In addition, you need to replace the 'modeling.py' in the original pytorch_pretrained_bert with the 'modeling.py' we provided.
 
 ### Program
 Run the program using the following command:
