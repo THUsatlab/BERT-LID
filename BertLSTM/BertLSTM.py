@@ -16,15 +16,19 @@ class BertLSTM(BertPreTrainedModel):
         self.bert = BertModel(config)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
-        self.rnn = nn.LSTM(80, rnn_hidden_size, num_layers,bidirectional=bidirectional, batch_first=True, dropout=dropout)
+        self.rnn = nn.LSTM(768, rnn_hidden_size, num_layers,bidirectional=bidirectional, batch_first=True, dropout=dropout)
         self.classifier = nn.Linear(rnn_hidden_size * 2, num_labels)
 
         self.apply(self.init_bert_weights)
 
     def forward(self, input_ids, token_type_ids=None, attention_mask=None, labels=None):
-        #encoded_layers, _ = self.bert(
-        #    input_ids, token_type_ids, attention_mask, output_all_encoded_layers=False)
-        encoded_layers = self.dropout(input_ids)
+        
+        input_ids = input_ids.long()
+        encoded_layers, _ = self.bert(
+            input_ids, token_type_ids, attention_mask, output_all_encoded_layers=False)
+        
+
+        #encoded_layers = self.dropout(input_ids)
         # encoded_layers: [batch_size, seq_len, bert_dim]
 
         _, (hidden, cell) = self.rnn(encoded_layers)

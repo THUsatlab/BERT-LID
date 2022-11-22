@@ -16,7 +16,7 @@ class BertDPCNN(BertPreTrainedModel):
         self.bert = BertModel(config)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
-        self.conv_region = nn.Conv2d(1, filter_num, (3, 80), stride=1)
+        self.conv_region = nn.Conv2d(1, filter_num, (3, 768), stride=1)
         self.conv = nn.Conv2d(filter_num, filter_num, (3, 1), stride=1)
         self.pooling = nn.MaxPool2d(kernel_size=(3,1), stride=2)
         self.padding_conv = nn.ZeroPad2d((0, 0, 1, 1))
@@ -27,11 +27,13 @@ class BertDPCNN(BertPreTrainedModel):
 
     def forward(self, input_ids, token_type_ids=None, attention_mask=None, labels=None):
 
-        #encoded_layers, _ = self.bert(
-        #    input_ids, token_type_ids, attention_mask, output_all_encoded_layers=False)
+
+        input_ids = input_ids.long()
+        encoded_layers, _ = self.bert(
+            input_ids, token_type_ids, attention_mask, output_all_encoded_layers=False)
         # encoded_layers: [batch_size, seq_len, bert_dim=768]
 
-        encoded_layers = self.dropout(input_ids)
+        encoded_layers = self.dropout(encoded_layers)
         encoded_layers = encoded_layers.unsqueeze(1) 
         # encoded_layers :[batch_size, 1, seq_len, bert_dim]
 

@@ -61,7 +61,7 @@ def get_args(data_dir, output_dir, cache_dir, bert_vocab_file, bert_model_dir, l
 
     # 训练参数
     parser.add_argument("--train_batch_size",
-                        default=64,
+                        default=16,
                         type=int,
                         help="Total batch size for training.")
 
