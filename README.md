@@ -6,15 +6,15 @@ We propose a BERT-based language identification system (BERT-LID) to improve lan
 We use OLR20, TIMIT&THCHS-30, [TAL_ASR](https://ai.100tal.com/dataset) datasets for experiments. Among them, in order to test in segment audio, we perform segmentation processing on TIMIT&THCHS-30, where the window length is 1s and the window movement is 1s for segmentation. The specific usage of data is shown in data. The TAL_ASR data is forcibly aligned. 
 
 ## Feature extraction
-The audio posterior probability feature is extracted as the input feature, and we use PHONEXIA BOTTLENECK FEATURE EXTRACTOR to extract. For more details, we can get more from "Multilingually trained bottleneck features in spoken language recognition". Since the default dimension of BERT is 768, it needs to be adjusted before feature input.
+We directly obtains the phoneme features of the audio through [Phoneme recognizer based on long temporal context](https://speech.fit.vutbr.cz/software/phoneme-recognizer-based-long-temporal-context), and then obtains tokens through the BertTokenizer model provided by BERT. We take this feature as input. For the specific processing of data, see the 'get_data.py'.
 
 ## Experiments
 
 ### Load data
-Load the data by adjusting the path parameters in load_data.py. In the experiment, we divided the dataset into three datasets: train, test, and dev.
+Load the data by adjusting the path parameters in 'load_data.py'. In the experiment, we divided the dataset into three datasets: train, test, and dev.
 
 ### Models
-Our model is saved in BertCNN, BertRCNN, BertDPCNN, BertLSTM, and pay attention to whether bert in the model-related file is turned on during use. In addition, you need to replace the 'modeling.py' in the original pytorch_pretrained_bert with the 'modeling.py' we provided.
+Our model is saved in BertCNN, BertRCNN, BertDPCNN, BertLSTM, and pay attention to whether bert in the model-related file is turned on during use. 
 
 ### Program
 Run the program using the following command:
@@ -37,16 +37,15 @@ bash run_me.sh
 ```
 
 ## References
-[1] Fer, Radek, et al. "Multilingually trained bottleneck features in spoken language recognition." Computer Speech & Language 46 (2017): 252-267.
+[1] P. Schwarz, "Phoneme Recognition based on Long Temporal Context, PhD Thesis", Brno University of Technology, 2009
 
-[2] P. Schwarz, "Phoneme Recognition based on Long Temporal Context, PhD Thesis", Brno University of Technology, 2009
+[2] TAL_ASR: https://ai.100tal.com/dataset
 
-[3] TAL_ASR: https://ai.100tal.com/dataset
+[2] Devlin, Jacob, et al. "Bert: Pre-training of deep bidirectional transformers for language understanding." arXiv preprint arXiv:1810.04805 (2018).
 
-[4] Devlin, Jacob, et al. "Bert: Pre-training of deep bidirectional transformers for language understanding." arXiv preprint arXiv:1810.04805 (2018).
+[4] https://github.com/codertimo/BERT-pytorch
 
-[5] https://github.com/codertimo/BERT-pytorch
-
+[5] Schwarz, Petr, et al. "Phoneme recognizer based on long temporal context." Speech Processing Group, Faculty of Information Technology, Brno University of Technology.[Online]. Available: http://speech. fit. vutbr. cz/en/software (2006).
 
 ## Citation
 
